@@ -1,0 +1,16 @@
+img {
+  width: auto;
+  height: 100vh;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: rgb(241, 241, 241);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

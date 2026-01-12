@@ -41,7 +41,7 @@ class DisplayApp:
     ):
         self.simulation_instance = simulation_instance
         self.app_params = dict(host=host, port=port, debug=debug)
-        self.app = Flask(__name__, template_folder="./")
+        self.app = Flask(__name__, template_folder="./static")
         self.target_fps = target_fps
 
     def setup_routes(self):
