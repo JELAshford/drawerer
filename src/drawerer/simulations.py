@@ -1,4 +1,4 @@
-from display_app import Simulation
+from drawerer.core import Simulation
 from scipy.signal import convolve2d
 from einops import repeat
 import numpy as np

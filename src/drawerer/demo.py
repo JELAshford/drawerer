@@ -1,4 +1,4 @@
-from display_app import DisplayApp, Simulation
+from drawerer.core import DisplayApp, Simulation
 import numpy as np
 
 
@@ -20,5 +20,9 @@ class RandomWalkerSimulation(Simulation):
             yield self.grid.astype(np.uint8)
 
 
-if __name__ == "__main__":
+def main():
     DisplayApp(RandomWalkerSimulation()).run()
+
+
+if __name__ == "__main__":
+    main()

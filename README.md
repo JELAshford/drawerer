@@ -1,4 +1,4 @@
-# Web Drawererer
+# Drawererer
 
 Prototyping a system to draw things with Python to an image-like array, and spit out the outputs to a web browser for easy visualisation.
 
