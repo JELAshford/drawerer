@@ -1,31 +1,29 @@
-# Web Drawerer
+# Web Drawererer
 
-System to run simulations in Python and split out the outputs to a web browser.
+Prototyping a system to draw things with Python to an image-like array, and spit out the outputs to a web browser for easy visualisation.
 
 ## Architecture
 
-To create a page that show a video we need to provide a function that yields the jpeg payload
-The conversion between a grid and jpeg is pretty standard
+`DisplayApp` creates a `Flask` app and sets up a place to draw and store the images being sent to it.
+It expects a JPEG image (as bytes) which it displays on the main page, defined by `index.html`.
+This uses some web magic that I don't fully understand like `mimetype="multipart/x-mixed-replace; boundary=frame"` but I will understand one day!
 
-This can just be a function, see current 'main.py'.
-But for reusability it would be great to have this setup somewhere we could just import the "app" and have it run.
-And ideally all the boilerplate of converting to a JPEG would be handled too.
+`Simulation` is a base class for producing grids, which are each step of the simulation, and converting them to `JPEG` byte sequences in a predicatable manner.
+The user is expected to subclass this then: setup all state in the `__init__` method and implement a `step()` generator which `yeild`s arrays for the `emit_jpeg()` method to convert to JPEG bytes.  
 
-So can have a base class `Simulation` which has methods:
+## Basic Example
 
-- `step`
-- `emit_jpeg`
+Take a look at `src/demo.py` for an example, the project is managed with `uv` so run:
 
-where `step` will be a user defined frame generator, and `emit_jpeg` has a default which just wraps the output in the jpeg conversion.
-Users can then subclass this and define their own `__init__` and `step` to make the view work as they want.
+```bash
+uv sync
+uv run src/demo.py
+```
 
-On the Flask side, ideally we want the app invokation to be a single line in a `main` function, and as a bonus having the changes detectable by the hot-reloadings debug system would be amazing.
-
-Something like `DisplayApp(address=...,port=...,simulator_intance=...).run()` on the last line
-So `DisplayApp()` needs to setup Flask, and create a function decorated with the `app_route` so that it's drawn on the `index.html` page.
-For starters, it makes sense to have a simulation per app, which means that actually the `app_route` should always be the same and drawn directly to the index.
-But we could maybe customise the title in the html?
+and navigate to the url logged to the terminal.
 
 ## Future Work
 
-Can we setup a server to link in multiple simulations, and how would that look? Difference "pages"?
+- [ ] Can we setup a server to link in multiple simulations, and how would that look? Difference "pages"?
+- [ ] When we reload the server in debug mode we get hot reloading (yay!) but we have to refresh the webpage. Can we use sockets to avoid this?
+- [ ] It's a bigger scope, but it would be great to get information back from the webpage about mouse clicks/movements - which sockets might let us do?

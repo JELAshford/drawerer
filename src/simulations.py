@@ -1,4 +1,4 @@
-from display_app import DisplayApp, Simulation
+from display_app import Simulation
 from scipy.signal import convolve2d
 from einops import repeat
 import numpy as np
@@ -72,7 +72,3 @@ class RandomRainfall(Simulation):
             # self.grid[..., 0] = np.roll(self.grid[..., 0], 1)
             # self.grid[..., 1] = np.roll(self.grid[..., 1], -1)
             yield self.grid.astype(np.uint8)
-
-
-if __name__ == "__main__":
-    DisplayApp(RandomWalkerSimulation()).run()
