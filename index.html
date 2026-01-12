@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Array Display</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      img {
+        width: auto;
+        height: 90vh;
+        max-height: 90vh;
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1>Arry Displayer</h1>
+      <img src="{{ url_for('video_feed') }}" />
+    </div>
+  </body>
+</html>
