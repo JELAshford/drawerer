@@ -17,7 +17,7 @@ Take a look at `src/demo.py` for an example, the project is managed with `uv` so
 
 ```bash
 uv sync
-uv run src/demo.py
+uv run drawerer-demo
 ```
 
 and navigate to the url logged to the terminal.
