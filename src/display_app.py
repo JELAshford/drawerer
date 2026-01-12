@@ -8,14 +8,13 @@ import time
 
 
 class Simulation:
-    def __init__(self, target_fps=60):
+    def __init__(self):
         self.img_buffer = BytesIO()
-        self.target_fps = target_fps
 
     def step(self) -> np.ndarray:
         raise NotImplementedError()
 
-    def emit_jpeg(self):
+    def emit_jpeg(self, target_fps: int = 60):
         for output_array in self.step():
             img = Image.fromarray(output_array, "RGB")
             self.img_buffer.seek(0)
@@ -28,7 +27,7 @@ class Simulation:
                 + b"\r\n"
             )
             # TODO; Use time differences to make this accurate
-            time.sleep(1 / self.target_fps)
+            time.sleep(1 / target_fps)
 
 
 class DisplayApp:
@@ -38,10 +37,12 @@ class DisplayApp:
         host: str = "0.0.0.0",
         port: int = 8080,
         debug: bool = True,
+        target_fps: int = 60,
     ):
         self.simulation_instance = simulation_instance
         self.app_params = dict(host=host, port=port, debug=debug)
         self.app = Flask(__name__, template_folder="./")
+        self.target_fps = target_fps
 
     def setup_routes(self):
         @self.app.route("/")
@@ -51,7 +52,7 @@ class DisplayApp:
         @self.app.route("/video_feed")
         def video_feed():
             return Response(
-                self.simulation_instance.emit_jpeg(),
+                self.simulation_instance.emit_jpeg(target_fps=self.target_fps),
                 mimetype="multipart/x-mixed-replace; boundary=frame",
             )
 
