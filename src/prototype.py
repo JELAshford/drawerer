@@ -51,5 +51,28 @@ class GameOfLifeSimulation(Simulation):
             yield repeat(self.grid, "h w -> h w 3") * 255
 
 
+class RandomRainfall(Simulation):
+    def __init__(self, grid_size: int = 200, num_points: int = 500, **kwargs):
+        super().__init__(**kwargs)
+        self.grid_size = grid_size
+        self.rng = np.random.default_rng()
+        self.num_points = num_points
+        self.points = self.rng.integers(0, grid_size, size=(2, num_points))
+        self.grid = np.zeros((self.grid_size, self.grid_size, 3))
+
+    def step(self):
+        while True:
+            updates = self.rng.integers(-1, 2, size=self.points.shape)
+            updates[0, :] = np.clip(np.abs(updates[0, :]), 0, 1)
+            self.points += updates.astype(np.uint8)
+            self.points %= self.grid_size
+            self.points = self.points.astype(np.uint8)
+            self.grid *= 0.95
+            self.grid[*self.points, :] = 255
+            # self.grid[..., 0] = np.roll(self.grid[..., 0], 1)
+            # self.grid[..., 1] = np.roll(self.grid[..., 1], -1)
+            yield self.grid.astype(np.uint8)
+
+
 if __name__ == "__main__":
     DisplayApp(RandomWalkerSimulation()).run()
