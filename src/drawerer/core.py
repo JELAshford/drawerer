@@ -14,15 +14,17 @@ class Simulation:
     def step(self) -> np.ndarray:
         raise NotImplementedError()
 
-    def emit_jpeg(self, target_fps: int = 60):
+    def emit_jpeg(self, target_fps: int = 60, img_format: str = "PNG"):
         for output_array in self.step():
             img = Image.fromarray(output_array, "RGB")
             self.img_buffer.seek(0)
             self.img_buffer.truncate()
-            img.save(self.img_buffer, format="JPEG")
+            img.save(self.img_buffer, format=img_format)
             self.img_buffer.seek(0)
             yield (
-                b"--frame\r\nContent-Type: image/jpeg\r\n\r\n"
+                b"--frame\r\nContent-Type: image/"
+                + img_format.lower().encode()
+                + b"\r\n\r\n"
                 + self.img_buffer.read()
                 + b"\r\n"
             )
